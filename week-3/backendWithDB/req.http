@@ -1,0 +1,90 @@
+### ===== USER API CRUD OPERATIONS =====
+
+### Read All Users
+GET http://localhost:4000/user-api/users
+
+### Read User by ID
+GET http://localhost:4000/user-api/users/
+### Create a New User
+POST http://localhost:4000/user-api/users
+Content-Type: application/json
+
+{
+     "username":"Tejas",
+     "password":"Tejas",
+     "email":"Tejas@mail.com",
+     "age":18
+}
+
+### Create Another User
+POST http://localhost:4000/user-api/users
+Content-Type: application/json
+
+{
+     "username":"Rohan",
+     "password":"Rohan",
+     "email":"Rohan@gmail.com",
+     "age":25
+}
+
+### Update a User
+PUT http://localhost:4000/user-api/users/
+Content-Type: application/json
+
+{
+     "username":"Tejas",
+     "password":"Tejas",
+     "email":"sadiq@gmail.com",
+     "age":18
+}
+
+### Delete a User
+DELETE http://localhost:4000/user-api/users/
+
+
+# ### user login
+POST  http://localhost:4000/user-api/auth
+Content-Type: application/json
+{
+    "username":"Tejas",
+    "password":"Tejas"
+}
+
+
+// product apis
+###
+POST http://localhost:4000/product-api/products
+Content-Type: application/json
+
+{
+ "productId":101,
+ "productName":"iPhone 14",
+ "price":45000,
+ "brand":"Apple"
+}
+
+###
+
+GET http://localhost:4000/product-api/products
+
+###
+
+GET http://localhost:4000/product-api/products/101
+
+
+### 
+PUT http://localhost:4000/product-api/products/101
+Content-Type: application/json
+
+{
+ "price":40000
+}
+
+
+###
+
+DELETE http://localhost:4000/product-api/products/101
+
+
+
+

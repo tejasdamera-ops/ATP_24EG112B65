@@ -1,0 +1,107 @@
+
+//dummy data
+#  GET http://localhost:3000/users
+
+#  ###
+
+#  POST http://localhost:3000/users
+
+
+#  ###
+
+# PUT http://localhost:3000/users
+
+#  ###
+#  DELETE http://localhost:3000/users
+
+
+# //test data
+# // get and delete reuqest does not contain body so that these two can send send data through end point
+# //post req and put requeset shd send data 
+
+### get all data
+GET http://localhost:3000/user-api/users  
+
+
+### read a user by id 5
+GET http://localhost:3000/user-api/users/5
+
+### create a new user
+
+POST http://localhost:3000/user-api/users
+Content-Type: application/json
+
+{
+    "id":1,
+    "name":"ravi",
+    "age":20
+}
+
+### update the user
+
+PUT http://localhost:3000/user-api/users
+Content-Type: application/json
+
+{
+    "id":1,
+    "name":"Tejas",
+    "age":24
+}
+
+###  delete a user by id
+
+DELETE http://localhost:3000/user-api/users/1
+
+
+
+
+// product apis
+
+###
+
+POST http://localhost:3000/product-api/products
+Content-Type: application/json
+
+{
+    "productId":1,
+    "name":"TV",
+    "brand":"samsung",
+    "price":450000
+}
+
+
+
+###
+GET http://localhost:3000/product-api/products
+
+###
+GET http://localhost:3000/product-api/brand
+
+
+###
+PUT http://localhost:3000/product-api/products
+Content-Type: application/json
+
+    {
+    "productId":1,
+    "name":"TV",
+    "brand":"LG",
+    "price":450000
+}
+
+###
+DELETE http://localhost:3000/product-api/products/1
+
+###
+GET http://localhost:3000/product-api/products/1
+
+
+
+
+
+
+
+
+
+
+
