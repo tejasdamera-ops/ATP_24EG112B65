@@ -1,0 +1,47 @@
+table{
+    margin-top: 60px;
+    width: 100%;
+    height: fit-content;
+       border-radius: 20px;
+   border-collapse: collapse;
+   box-shadow: 0px 0px 20px;
+   
+}
+img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: solid black;
+
+    
+}
+thead,tbody{
+    text-align: center;
+    padding: 20px;
+
+    
+}
+th{
+    padding: 30px;
+    
+}
+.mainheading{
+    border-radius: 20px;  
+    background-color: rgb(66, 146, 119);
+    box-shadow: inset;
+}
+
+.lightcolor{
+    background-color:rgb(153, 225, 208);
+    padding:40px;
+}
+.Subheading{
+    background-color: rgb(153, 225, 208);
+    
+}
+.greycolor{
+    background-color: rgb(178, 253, 227);
+}
+body{
+    background-color: rgb(58, 130, 126);
+}
