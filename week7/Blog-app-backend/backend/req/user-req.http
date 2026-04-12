@@ -1,0 +1,13 @@
+## get aritcles of all the authors
+
+GET http://localhost:4000/userApp/articles
+
+## add comment to an articel
+
+PUT http://localhost:4000/userApp/articles
+Content-Type: application/json
+
+{
+  "articleId": "",
+  "comment": "This is a comment"
+}

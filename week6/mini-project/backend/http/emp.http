@@ -1,0 +1,28 @@
+### post empoloyee details
+POST http://localhost:5000/emp-api/employees
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "mobile": "1234567890",
+    "designation": "Software Engineer",
+    "companyName": "ABC Corp"
+}
+
+
+### read all employees
+GET http://localhost:5000/emp-api/employees
+
+### edit employees
+
+PUT http://localhost:5000/emp-api/employees/69ca2589fb03b34a51f9ead0
+Content-Type: application/json
+
+{
+    "name": "John Doe Updated"
+    
+}
+
+### delete employees
+DELETE http://localhost:5000/emp-api/employees/69ca2589fb03b34a51f9ead0

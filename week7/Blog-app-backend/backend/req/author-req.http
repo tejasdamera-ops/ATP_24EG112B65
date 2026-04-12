@@ -1,0 +1,36 @@
+### Create new article
+POST http://localhost:400/author-api/articles
+Content-Type: application/json
+
+{
+    "author":"haebjdkjwbfjkbflabfk",
+    "title":"Article-1 by Author 1",
+    "category":"Programming",
+    "content":"Test article on programming",
+    "comments":"[]"
+}
+
+
+### Get all articles
+GET http://localhost:400/author-api/articles
+
+### update article by author
+PUT http://localhost:400/author-api/articles
+Content-Type: application/json
+
+{    
+    "articleId":"",
+    "title":"Updated Article Title",
+    "category":"Updated Category",
+    "content":"Updated Content"
+}
+
+
+### delete arcticle to delete articke by author
+PATCH http://localhost:400/author-api/articles
+Content-Type: application/json
+
+{
+    "articleId":"",
+    "isArticleActive":false
+}
