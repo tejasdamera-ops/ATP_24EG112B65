@@ -4,7 +4,6 @@
 // import CreateEmp from "./src/components/CreateEmp";
 // import ListOfEmp from "./src/components/ListOfEmp";
 
-
 // function App() {
 //   const routerObj = createBrowserRouter([
 //     {
@@ -23,15 +22,13 @@
 
 // export default App;
 
-
-
-import { createBrowserRouter, RouterProvider } from "react-router";
-import RootLayout from "./components/RootLayout";
-import Home from "./components/Home";
-import CreateEmp from "./components/CreateEmp";
-import ListOfEmps from "./components/ListOfEmps";
-import Employee from './components/Employee'
-import EditEmployee from './components/EditEmployee'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RootLayout from "./src/components/RootLayout";
+import Home from "./src/components/Home";
+import CreateEmp from "./src/components/CreateEmp";
+import ListOfEmp from "./src/components/ListOfEmp";
+import Employee from "./src/components/Employee";
+import EditEmployee from "./src/components/EditEmployee";
 
 function App() {
   const routerObj = createBrowserRouter([
@@ -41,10 +38,9 @@ function App() {
       children: [
         { path: "", element: <Home /> },
         { path: "create-emp", element: <CreateEmp /> },
-        { path: "list", element: <ListOfEmps /> },
-        { path:"employee",element:<Employee />},
-        { path:"edit-emp",element:<EditEmployee />}
-
+        { path: "list", element: <ListOfEmp /> },
+        { path: "employee", element: <Employee /> },
+        { path: "edit-emp", element: <EditEmployee /> },
       ],
     },
   ]);

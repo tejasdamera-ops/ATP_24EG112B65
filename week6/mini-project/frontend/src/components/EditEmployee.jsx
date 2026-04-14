@@ -1,94 +1,94 @@
 import React from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation ,useNavigate} from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_ENDPOINTS from "../config/apiConfig";
 function EditEmployee() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm();
 
+  const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state);
-      
-  useEffect(()=>{
-    setValue("name",state.name);
-    setValue("email",state.email);
-    setValue("mobile",state.mobile);
-    setValue("designation",state.designation);
-    setValue("companyNamy",state.companyName);
-  })
 
+  useEffect(() => {
+    if (!state) {
+      navigate("/list");
+      return;
+    }
 
-  const saveModifiedFuntion=async (modifiedEmp) {
-    console.log(modifiedEmp);
-     //make http put req
-     const res=await axios.put("http://localhost:5000/emp-api/employees/{}")
-    
-  }
-  const deleteByID=async (id) => {
-    let res=await axios.get("");
-    if(res.status===200){
-      getEmps()
+    setValue("name", state.name || "");
+    setValue("email", state.email || "");
+    setValue("mobile", state.mobile || "");
+    setValue("designation", state.designation || "");
+    setValue("companyName", state.companyName || "");
+  }, [state, setValue, navigate]);
+
+  const saveModifiedFuntion = async (modifiedEmp) => {
+    try {
+      const res = await axios.put(
+        `${API_ENDPOINTS.EMPLOYEES}/${state._id}`,
+        modifiedEmp,
+      );
+      if (res.status === 200) {
+        navigate("/list");
+      }
+    } catch (err) {
+      console.error("Error updating employee:", err);
     }
-  }
-  async function getEmps() {
-    let res=await axios.get("http://localhost:4000/emp-api/employees");
-    console.log(res);
-    
-    if(res.status==200){
-      let resObj=await res.json();
-      console.log(resObj);
-      
-      setEpms(res.payload);
+  };
+
+  const deleteByID = async (id) => {
+    try {
+      const res = await axios.delete(`${API_ENDPOINTS.EMPLOYEES}/${id}`);
+      if (res.status === 200) {
+        navigate("/list");
+      }
+    } catch (err) {
+      console.error("Error deleting employee:", err);
     }
-  }
-  useEffect(()=>{
-    getEmps()
-  },[])
-  
-    
-  
+  };
 
   return (
     <div>
-      <h1 className="text-5xl text-center text-gray-600">
-        Create New Employee
-      </h1>
-      {/* form */}
-      <form className=" max-w-md mx-auto mt-10">
+      <h1 className="text-5xl text-center text-gray-600">Edit Employee</h1>
+      <form
+        className="max-w-md mx-auto mt-10"
+        onSubmit={handleSubmit(saveModifiedFuntion)}
+      >
         <input
           type="text"
-          placeholder="Enter name "
-          {...register("name")}
+          placeholder="Enter name"
+          {...register("name", { required: true })}
           className="mb-3 border border-2 p-3 w-full rounded-2xl"
         />
         <input
           type="email"
-          placeholder="Enter Email "
-          {...register("email")}
+          placeholder="Enter Email"
+          {...register("email", { required: true })}
           className="mb-3 border border-2 p-3 w-full rounded-2xl"
         />
 
         <input
           type="number"
           placeholder="Enter mobile number"
-          {...register("mobile")}
+          {...register("mobile", { required: true })}
           className="mb-3 border border-2 p-3 w-full rounded-2xl"
         />
         <input
           type="text"
           placeholder="Enter designation"
-          {...register("designation")}
+          {...register("designation", { required: true })}
           className="mb-3 border border-2 p-3 w-full rounded-2xl"
         />
         <input
           type="text"
           placeholder="Enter name of the company"
-          {...register("companyName")}
+          {...register("companyName", { required: true })}
           className="mb-3 border border-2 p-3 w-full rounded-2xl"
         />
 
@@ -96,7 +96,7 @@ function EditEmployee() {
           type="submit"
           className="text-2xl rounded-2xl bg-green-600 text-white block mx-auto p-4"
         >
-         submit
+          Save Changes
         </button>
       </form>
     </div>

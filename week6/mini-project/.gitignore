@@ -1,0 +1,134 @@
+*.md
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/settings.json
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.iml
+*.swp
+*.swo
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+lerna-debug.log*
+pnpm-debug.log*
+
+# Production
+dist/
+build/
+.next/
+out/
+
+# Testing
+coverage/
+.nyc_output/
+junit.xml
+
+# Misc
+.cache/
+.parcel-cache
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn/install-state.gz
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variables file
+.env*
+!.env.example
+
+# macOS
+.AppleDouble
+.AppleDB
+._*
+
+# Windows
+$RECYCLE.BIN/
+ehthumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Misc temp files
+*.orig
+*.rej
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+dist-ssr
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Lock files (optional - uncomment if you want to track them)
+# package-lock.json
+# yarn.lock
+
+# IDE
+.vscode
+idea/
+
+# Local env overrides
+.env.local
+
+# pnpm
+pnpm-lock.yaml
