@@ -1,28 +1,29 @@
-### post empoloyee details
-POST http://localhost:5000/emp-api/employees
+###
+POST http://localhost:5000/emp-api/emp
 Content-Type: application/json
 
 {
-    "name": "John Doe",
-    "email": "john.doe@example.com",
-    "mobile": "1234567890",
-    "designation": "Software Engineer",
-    "companyName": "ABC Corp"
+    "name":"emp3",
+    "email":"emp3@gmail.com",
+    "mobile":9898989898,
+    "designation":"HR",
+    "companyName":"Suntek"
 }
+###
+GET http://localhost:5000/emp-api/emp
 
-
-### read all employees
-GET http://localhost:5000/emp-api/employees
-
-### edit employees
-
-PUT http://localhost:5000/emp-api/employees/69ca2589fb03b34a51f9ead0
+###
+PUT http://localhost:5000/emp-api/emp/69ca251926c38c8f2163c7df
 Content-Type: application/json
 
 {
-    "name": "John Doe Updated"
-    
+    "name":"emp2",
+    "email":"emp2@gmail.com",
+    "mobile":9898989999,
+    "designation":"Manager",
+    "companyName":"Suntek"
 }
 
-### delete employees
-DELETE http://localhost:5000/emp-api/employees/69ca2589fb03b34a51f9ead0
+###
+DELETE http://localhost:5000/emp-api/emp/69cab0b9a9220135c685732b
+

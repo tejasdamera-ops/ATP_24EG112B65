@@ -1,27 +1,33 @@
-import {Schema,model  } from "mongoose";
+import { Schema, model } from "mongoose";
 
-const employeeSchema = new Schema({
-    name:{
-        type:String,
-        required:true
+const empSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Name is mandatory"],
     },
-    email:{
-        type:String,
-        required:true,
-        unique:true 
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: [true, "email already exists"],
     },
-    mobile:{
-        type:String,
-        required:true,
+    mobile: {
+      type: String,
+      required: [true, "mobile is required"],
     },
-    designation:{
-        type:String,
-        required:true
+    designation: {
+      type: String,
+      required: [true, "designation is required"],
     },
-    companyName:{
-        type:String,
-        required:true
-    }
-})
+    companyName: {
+      type: String,
+      required: [true, "Company Name is required"],
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  },
+);
 
-export const EmployeeModel = model("Employee",employeeSchema);
+export const EmployeeModel = model("employee", empSchema);

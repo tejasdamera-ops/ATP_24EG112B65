@@ -72,3 +72,6 @@ temp/
 # Windows
 $RECYCLE.BIN/
 ehthumbs.db
+
+
+*.md
