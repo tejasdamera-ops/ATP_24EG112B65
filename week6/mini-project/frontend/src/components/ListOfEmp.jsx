@@ -1,94 +1,86 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import API_ENDPOINTS from "../config/apiConfig";
+import {useNavigate} from 'react-router'
+import axios from 'axios'
+import { EMP_API_URL } from "../config/apiConfig.js";
 
-function ListOfEmp() {
+
+function ListOfEmps() {
   const [emps, setEmps] = useState([]);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const gotoEmploee = (empObj) => {
-    navigate("/employee", { state: empObj });
-  };
-
-  const gotoEditEmploee = (empObj) => {
-    navigate("/edit-emp", { state: empObj });
-  };
-
-  const deleteEmployee = async (id) => {
-    try {
-      const res = await fetch(`${API_ENDPOINTS.EMPLOYEES}/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        throw new Error(`Failed to delete employee: ${res.status}`);
-      }
-
-      setEmps((prevEmps) => prevEmps.filter((emp) => emp._id !== id));
-    } catch (err) {
-      console.error("Error deleting employee:", err);
-      setError(err.message || "Unable to delete employee.");
+  const goToEmployee=(empObj)=>{
+    // navigate to employee programatically along iwth the empobj
+    navigate('/employee',{state:empObj})
+  }
+  const deleteEmp=async (id)=>{
+    try{
+    setLoading(true);
+    setError("");
+    let res = await axios.delete(`${EMP_API_URL}/${id}`)
+    if(res.status===200){
+      //get the latest data
+        getEmps();
     }
-  };
-
-  useEffect(() => {
-    async function getEmps() {
-      try {
-        const res = await fetch(API_ENDPOINTS.EMPLOYEES);
-        if (!res.ok)
-          throw new Error(`Failed to fetch employees: ${res.status}`);
-        const resObj = await res.json();
-        setEmps(resObj.payload || []);
-      } catch (err) {
-        console.error("Error fetching employees:", err);
-        setError(err.message || "Unable to fetch employees.");
-      }
+  }catch (err) {
+      console.log("err in catch", err);
+      //deal with err
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    getEmps();
-  }, []);
-
-  if (error) {
-    return <p className="text-center text-red-500 text-xl mt-10">{error}</p>;
   }
 
+   
+  const goToEditEmp=(empObj)=>{
+    navigate('/edit-emp',{state:empObj})
+  }
+  async function getEmps(empObj) {
+    try{
+      setLoading(true);
+      setError("");
+      let res = await axios.get(EMP_API_URL);
+      if (res.status === 200) {
+        let resObj = res.data;
+        setEmps(resObj.payload);
+      }
+    }catch (err) {
+      console.log("err in catch", err);
+      //deal with err
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+    }
+  useEffect(() => {
+    getEmps();
+  }, []);
+if (loading) {
+    return <p className="text-center text-4xl">Loading....</p>;
+  }
+  if (error) {
+    return <p className="text-red-500 text-center text-3xl">{error}</p>;
+  }
   return (
     <div>
       <h1 className="text-4xl text-center">List of Employees</h1>
-      {emps.length === 0 ? (
-        <p className="text-center text-gray-500 mt-10">No employees found.</p>
-      ) : (
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-          {emps.map((empObj) => (
-            <div key={empObj._id} className=" bg-white p-5">
-              <p>{empObj.email}</p>
-              <p>{empObj.name}</p>
-              <div className="flex justify-around">
-                <button
-                  className="bg-green-400 rounded-2xl"
-                  onClick={() => gotoEmploee(empObj)}
-                >
-                  View
-                </button>
-                <button
-                  className="bg-yellow-400 rounded-2xl"
-                  onClick={() => gotoEditEmploee(empObj)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="bg-red-400 rounded-2xl"
-                  onClick={() => deleteEmployee(empObj._id)}
-                >
-                  Delete
-                </button>
-              </div>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {emps.map((empObj) => (
+          <div key={empObj._id} className=" bg-white p-2 rounded-2xl shadow-2xl shadow-amber-800">
+            <p>{empObj?.email}</p>
+            <p>{empObj?.name}</p>
+            <div className="flex justify-around">
+              {/* 3 buttons */}
+              <button onClick={()=>goToEmployee(empObj)} className="bg-amber-300 p-2 rounded-3xl">View</button>
+              <button onClick={()=>goToEditEmp(empObj)} className="bg-blue-300 p-2 rounded-3xl">Edit</button>
+              <button onClick={()=>deleteEmp(empObj._id)} className="bg-red-300 p-2 rounded-3xl">Delete</button>
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default ListOfEmp;
+export default ListOfEmps;

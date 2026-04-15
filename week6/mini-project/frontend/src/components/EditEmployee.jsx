@@ -1,106 +1,98 @@
-import React from "react";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import API_ENDPOINTS from "../config/apiConfig";
+import { useLocation ,useNavigate} from "react-router";
+import {useEffect ,useState} from 'react'
+import axios from 'axios';
+import { EMP_API_URL } from "../config/apiConfig.js";
+
 function EditEmployee() {
-  const {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+   const {
     register,
     handleSubmit,
-    formState: { errors },
-    setValue,
+    formState: { errors },setValue
   } = useForm();
 
+  const {state}=useLocation();
+  console.log(state);
+  useEffect(()=>{
+  setValue("name",state.name)
+  setValue("email",state.email)
+  setValue("mobile",state.mobile)
+  setValue("designation",state.designation)
+  setValue("companyName",state.companyName)
+},[]);
+
+
+  
   const navigate = useNavigate();
-  const { state } = useLocation();
-
-  useEffect(() => {
-    if (!state) {
-      navigate("/list");
-      return;
+  const saveModifiedEmp = async(modifiedEmp)=>{
+    // console.log(modifiedEmp);
+    // Make http put request
+    try{
+      setLoading(true);
+    const res =await axios.put(`${EMP_API_URL}/${state._id}`, modifiedEmp);
+    if(res.status===200){
+      navigate('/list');
     }
-
-    setValue("name", state.name || "");
-    setValue("email", state.email || "");
-    setValue("mobile", state.mobile || "");
-    setValue("designation", state.designation || "");
-    setValue("companyName", state.companyName || "");
-  }, [state, setValue, navigate]);
-
-  const saveModifiedFuntion = async (modifiedEmp) => {
-    try {
-      const res = await axios.put(
-        `${API_ENDPOINTS.EMPLOYEES}/${state._id}`,
-        modifiedEmp,
-      );
-      if (res.status === 200) {
-        navigate("/list");
-      }
-    } catch (err) {
-      console.error("Error updating employee:", err);
+  }catch (err) {
+      console.log("err in catch", err);
+      //deal with err
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const deleteByID = async (id) => {
-    try {
-      const res = await axios.delete(`${API_ENDPOINTS.EMPLOYEES}/${id}`);
-      if (res.status === 200) {
-        navigate("/list");
-      }
-    } catch (err) {
-      console.error("Error deleting employee:", err);
-    }
-  };
-
+  }
+   if (loading) {
+    return <p className="text-center text-4xl">Loading....</p>;
+  }
+  if (error) {
+    return <p className="text-red-500 text-center text-3xl">{error}</p>;
+  }
   return (
     <div>
-      <h1 className="text-5xl text-center text-gray-600">Edit Employee</h1>
-      <form
-        className="max-w-md mx-auto mt-10"
-        onSubmit={handleSubmit(saveModifiedFuntion)}
-      >
+       <h1 className="text-5xl text-center text-red-600">Edit Employee</h1>
+      
+      <form className=" max-w-md mx-auto mt-10" onSubmit={handleSubmit(saveModifiedEmp)} >
         <input
           type="text"
-          placeholder="Enter name"
-          {...register("name", { required: true })}
-          className="mb-3 border border-2 p-3 w-full rounded-2xl"
+          placeholder="Enter name "
+          {...register("name")}
+          className="mb-3  border-2 p-3 w-full rounded-2xl"
         />
         <input
           type="email"
-          placeholder="Enter Email"
-          {...register("email", { required: true })}
-          className="mb-3 border border-2 p-3 w-full rounded-2xl"
+          placeholder="Enter Email "
+          {...register("email")}
+          className="mb-3  border-2 p-3 w-full rounded-2xl"
+            disabled// diabled in form for editing
         />
 
         <input
           type="number"
           placeholder="Enter mobile number"
-          {...register("mobile", { required: true })}
-          className="mb-3 border border-2 p-3 w-full rounded-2xl"
+          {...register("mobile")}
+          className="mb-3  border-2 p-3 w-full rounded-2xl"
         />
         <input
           type="text"
           placeholder="Enter designation"
-          {...register("designation", { required: true })}
-          className="mb-3 border border-2 p-3 w-full rounded-2xl"
+          {...register("designation")}
+          className="mb-3  border-2 p-3 w-full rounded-2xl"
         />
         <input
           type="text"
           placeholder="Enter name of the company"
-          {...register("companyName", { required: true })}
-          className="mb-3 border border-2 p-3 w-full rounded-2xl"
+          {...register("companyName")}
+          className="mb-3  border-2 p-3 w-full rounded-2xl"
         />
 
-        <button
-          type="submit"
-          className="text-2xl rounded-2xl bg-green-600 text-white block mx-auto p-4"
-        >
-          Save Changes
+        <button type="submit" className="text-2xl rounded-2xl bg-green-600 text-white block mx-auto p-4">
+          Save
         </button>
       </form>
     </div>
-  );
+  )
 }
 
-export default EditEmployee;
+export default EditEmployee
