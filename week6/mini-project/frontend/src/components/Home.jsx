@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import { counterContextObj } from "../context/ContextProvider";
 import { useCounterStore } from "../store/CounterStore";
 
 function Home() {
@@ -16,8 +14,6 @@ function Home() {
 
   let user = useCounterStore((state) => state.user);
   let changeNameAndAge = useCounterStore((state) => state.changeNameAndAge);
-
-  const { counter, changeCounter } = useContext(counterContextObj);
 
   return (
     <div>
