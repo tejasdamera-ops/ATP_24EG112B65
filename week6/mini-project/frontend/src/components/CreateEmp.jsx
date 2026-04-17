@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { EMP_API_URL } from "../config/apiConfig.js";
 
 function CreateEmp() {
@@ -43,17 +43,12 @@ function CreateEmp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      
       <div className="w-full max-w-lg bg-white p-6 sm:p-10 rounded-2xl shadow-md">
-        
         <h1 className="text-3xl sm:text-4xl md:text-5xl text-center text-gray-600 mb-6">
           Create New Employee
         </h1>
 
-        <form
-          className="space-y-4"
-          onSubmit={handleSubmit(onFormSubmit)}
-        >
+        <form className="space-y-4" onSubmit={handleSubmit(onFormSubmit)}>
           <input
             type="text"
             placeholder="Enter name"
