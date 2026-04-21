@@ -5,7 +5,7 @@ import { config } from "dotenv";
 import { userApp } from "./API/UserAPI.js";
 import { authorApp } from "./API/AuthorAPI.js";
 import { adminApp } from "./API/AdminAPI.js";
-import { commonApp } from "./API/CommonAPI.js";
+import { commonApp } from "./API/commonAPI.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
