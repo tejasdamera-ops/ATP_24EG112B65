@@ -1,47 +1,44 @@
-import { Schema, Types, model } from "mongoose";
+import { Schema, SchemaTypes, model } from "mongoose";
 
 const commentSchema = new Schema({
   user: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "user",
-    required: [true, "user id required"],
+    required: [true, "user id is required"],
   },
   comment: {
-
     type: String,
-    required:[true,'Enter a comment']
+    required: [true, "Enter a comment"],
   },
 });
-
 const articleSchema = new Schema(
   {
     author: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
-      required: [true, "Author ID is req"],
+      required: [true, "Author id is required"],
     },
     title: {
       type: String,
-      required: [true, "Title is req"],
+      required: [true, "Title is required"],
     },
-
     category: {
       type: String,
       required: [true, "Category is required"],
     },
     content: {
       type: String,
-      required: [true, "content is required"],
+      required: [true, "Content is required"],
     },
-    isArticleActive:{
-      type:Boolean,
-      default:true, 
+    comment: [{ type: commentSchema, default: [] }],
+    isArticleActive: {
+      type: Boolean,
+      default: true,
     },
-    comments: [{type:commentSchema,default:[]}]
   },
   {
-    timestamps: false,
     versionKey: false,
+    timestamps: true,
     strict: "throw",
   },
 );

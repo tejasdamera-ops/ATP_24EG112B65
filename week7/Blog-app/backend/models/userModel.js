@@ -1,4 +1,4 @@
-import { Schema,model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -6,24 +6,24 @@ const userSchema = new Schema(
       type: String,
       required: [true, "first name is required"],
     },
-    LastName: {
+    lastName: {
       type: String,
     },
     email: {
       type: String,
-      required: [true, "email required"],
+      required: [true, "email is required"],
       unique: [true, "email already exists"],
     },
     password: {
       type: String,
-      required: [true, "password is requird"],
+      required: [true, "password is mandatory"],
     },
     role: {
       type: String,
-      enum: ["USER", "ADMIN", "AUTHOR"],
-      required: [true, "role is requird"],
+      enum: ["USER", "AUTHOR", "ADMIN"],
+      required: [true, "Invalid role"],
     },
-    profileImageURL: {
+    profileImageUrl: {
       type: String,
     },
     isUserActive: {
@@ -32,8 +32,8 @@ const userSchema = new Schema(
     },
   },
   {
-    timestamps: true,
     versionKey: false,
+    timestamps: true,
     strict: "throw",
   },
 );

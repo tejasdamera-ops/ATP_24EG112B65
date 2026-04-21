@@ -1,24 +1,25 @@
 // Create express application
-import exp from 'express'
-import { connect } from 'mongoose'
-import { config } from 'dotenv'
-import { userApp } from './APIs/UserAPI.js';
-import { authorApp } from './APIs/AuthorAPI.js';
-import { adminApp } from './APIs/AdminAPI.js';
-import { commonApp } from './APIs/CommonAPI.js';
-import cookieParser from 'cookie-parser';
-import cors from "cors"
+import exp from "express";
+import { connect } from "mongoose";
+import { config } from "dotenv";
+import { userApp } from "./API/UserAPI.js";
+import { authorApp } from "./API/AuthorAPI.js";
+import { adminApp } from "./API/AdminAPI.js";
+import { commonApp } from "./API/CommonAPI.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 config();
-const app = exp()
+const app = exp();
 
-app.use(cors({
-  origin: "https://blogapp-atp-capstone-24eg112b65.vercel.app",
-  credentials: true,
-  //methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  //allowedHeaders: ["Content-Type", "Authorization"]
-}));
-
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+    //methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    //allowedHeaders: ["Content-Type", "Authorization"]
+  }),
+);
 
 // assign port
 
@@ -29,47 +30,39 @@ const connectDB = async () => {
     console.log("connected to database");
 
     const port = process.env.PORT || 5000;
-    app.listen(port, () => console.log(`server started on port ${port}`))
-  }
-  catch (err) {
+    app.listen(port, () => console.log(`server started on port ${port}`));
+  } catch (err) {
     console.log("error in db connection");
   }
-}
+};
 
 connectDB();
 
-
-
 // body parser middleware
 app.use(exp.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 //path level middleware
-app.use('/user-api', userApp);
-app.use('/author-api', authorApp);
-app.use('/admin-api', adminApp);
-app.use('/auth', commonApp);
-
-
+app.use("/user-api", userApp);
+app.use("/author-api", authorApp);
+app.use("/admin-api", adminApp);
+app.use("/auth", commonApp);
 
 //to handle invalid path
 app.use((req, res, next) => {
-  console.log(req.url)
-  res.status(404).json({ message: `path ${req.url} is invalid` })
-})
+  console.log(req.url);
+  res.status(404).json({ message: `path ${req.url} is invalid` });
+});
 
 // error handling middleware[ALWAYS KEEP AT END OF THE FILE]
 app.use((err, req, res, next) => {
-  console.log("Error name:", err.name);
-  console.log("Error code:", err.code);
-  console.log("Error cause:", err.cause);
-  console.log("Full error:", JSON.stringify(err, null, 2));
+  console.error("Error:", err.message);
 
   // ValidationError
   if (err.name === "ValidationError") {
     return res.status(400).json({
       message: "error occurred",
-      error: err.message
+      error: err.message,
     });
   }
 
@@ -77,12 +70,13 @@ app.use((err, req, res, next) => {
   if (err.name === "CastError") {
     return res.status(400).json({
       message: "error occurred",
-      error: err.message
+      error: err.message,
     });
   }
 
   const errCode = err.code ?? err.cause?.code ?? err.errorResponse?.code;
-  const keyValue = err.keyValue ?? err.cause?.keyValue ?? err.errorResponse?.keyValue;
+  const keyValue =
+    err.keyValue ?? err.cause?.keyValue ?? err.errorResponse?.keyValue;
 
   // Duplicate key error
   if (errCode === 11000) {
@@ -91,13 +85,16 @@ app.use((err, req, res, next) => {
 
     return res.status(409).json({
       message: "error occurred",
-      error: `${field} "${value}" already exists`
+      error: `${field} "${value}" already exists`,
     });
   }
 
   // Server error
   res.status(500).json({
     message: "error occurred",
-    error: "Server side error"
+    error:
+      process.env.NODE_ENV === "production"
+        ? "Internal server error"
+        : err.message,
   });
 });

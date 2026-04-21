@@ -1,13 +1,46 @@
-## get aritcles of all the authors
-
-GET http://localhost:4000/userApp/articles
-
-## add comment to an articel
-
-PUT http://localhost:4000/userApp/articles
+### add a new user i.e. REGISTRATION
+POST http://localhost:5000/auth/users
 Content-Type: application/json
 
 {
-  "articleId": "",
-  "comment": "This is a comment"
+    "firstName":"A",
+    "lastName":"admin",
+    "email":"admin@gmail.com",
+    "password":"admin",
+    "role":"ADMIN",
+    "profileImageUrl":"admin"
+}
+
+### login
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+    "email":"user1@gmail.com",
+    "password":"user1"
+}
+
+###
+GET  http://localhost:5000/auth/logout
+
+### read articeles od all authors
+GET http://localhost:5000/user-api/articles
+
+### add comment to an article
+PUT http://localhost:5000/user-api/articles
+Content-Type: application/json
+
+{
+    "articleId":"69b3cec07a95fff64d02464f",
+    "comment":"This is a good article"
+}
+
+
+### change the password
+PUT http://localhost:5000/auth/password
+Content-Type: application/json
+
+{
+    "currentPassword":"USER1",
+    "newPassword":"user1"
 }

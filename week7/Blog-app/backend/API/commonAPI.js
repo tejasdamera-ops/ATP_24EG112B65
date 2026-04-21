@@ -1,127 +1,177 @@
+// create mini applications
 import exp from "express";
-import { UserModel } from "../models/userModel.js";
+import { UserModel } from "../models/UserModel.js";
 import { hash, compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { userApp } from "./UserAPI.js";
+import { verifyToken } from "../middleware/verifyToken.js";
+
+export const commonApp = exp.Router();
+import { upload } from "../config/multer.js";
+import { uploadToCloudinary } from "../config/cloudinaryUpload.js";
+import cloudinary from "../config/cloudinary.js";
 
 const { sign } = jwt;
 
-export const commonApp = exp.Router();
+// Route to register
+commonApp.post(
+  "/users",
+  upload.single("profileImageUrl"),
+  async (req, res, next) => {
+    let cloudinaryResult;
 
-// Register User
-commonApp.post("/users", async (req, res, next) => {
-  try {
-    const allowedRoles = ["USER", "AUTHOR"];
-    const newUser = req.body;
+    try {
+      // get tthe details of the user
+      const newUser = req.body;
 
-    if (!allowedRoles.includes(newUser.role)) {
-      return res.status(400).json({ message: "invalid role" });
+      // check for the roles : only author and user not admin
+      let allowedRoles = ["USER", "AUTHOR"];
+      if (!allowedRoles.includes(newUser.role))
+        return res.status(400).json({ message: "invalid role" });
+
+      /// upload image to cloudinary from memoryStorage
+      if (req.file) {
+        try {
+          const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+          newUser.profileImageUrl = cloudinaryResult?.secure_url;
+        } catch (err) {
+          newUser.profileImageUrl = "";
+        }
+      } else {
+        newUser.profileImageUrl = "";
+      }
+
+      // add CDN link of image to new userObj
+      newUser.profileImageUrl = cloudinaryResult?.secure_url;
+
+      // RUN VALIDATORS MANUALLY
+
+      // replace the password eith hashed password
+      newUser.password = await hash(newUser.password, 12);
+
+      // create document
+      const userDocument = new UserModel(newUser);
+
+      // save document
+      await userDocument.save();
+
+      // send respone
+      res.status(201).json({ message: "User registered " });
+    } catch (err) {
+      //delete image from cloudinary
+      if (cloudinaryResult?.public_id)
+        await cloudinary.uploader.destroy(cloudinaryResult.public_id);
+
+      next(err);
     }
+  },
+);
 
-    //check existing user
-    const user = await UserModel.findOne({ email: newUser.email });
-    if (user) {
-      return res.status(400).json({ message: "User already exists" });
-    }
+// route for login
+commonApp.post("/login", async (req, res) => {
+  // get email and password from the req
+  const { email, password } = req.body;
 
-    //hash password
-    newUser.password = await hash(newUser.password, 12);
-
-    const newUserDoc = new UserModel(newUser);
-    await newUserDoc.save();
-
-    res.status(201).json({ message: "User Created" });
-  } catch (err) {
-    next(err);
+  // get user details
+  const user = await UserModel.findOne({ email: email });
+  if (!user) {
+    return res.status(400).json({ message: "Invalid email" });
   }
-});
 
-// Login User
-commonApp.post("/login", async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await UserModel.findOne({ email });
-
-    if (!user) {
-      return res.status(400).json({ message: "invalid credentials" });
-    }
-
-    const isMatch = await compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(400).json({ message: "invalid credentials" });
-    }
-
-    const token = sign(
-      {
-        id: user._id,
-        email: user.email,
-        role: user.role,
-      },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "1d" },
-    );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    });
-
-    const userObj = user.toObject();
-    delete userObj.password;
-
-    res.status(200).json({
-      message: "Login successful",
-      user: userObj,
-    });
-  } catch (err) {
-    next(err);
+  // compare the password with og password
+  let isMatched = await compare(password, user.password);
+  if (!isMatched) {
+    return res.status(400).json({ message: "Incorrect password" });
   }
-});
 
-// Logout
-commonApp.get("/logout", (req, res) => {
-  res.clearCookie("token", {
+  // TOKEN CREATION
+  const signedToken = sign(
+    {
+      id: user._id,
+      email: user.email,
+      role: user.role,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      profileImageUrl: user.profileImageUrl,
+    },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: "1h" },
+  );
+
+  // set token to the cookie header
+  res.cookie("token", signedToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    sameSite: "none",
+    secure: true,
   });
 
-  res.status(200).json({ message: "Logout successful" });
+  // remove the password field from the user obj
+  const userObj = user.toObject();
+  delete userObj.password;
+
+  res.status(200).json({ message: "Login Successful", payload: userObj });
 });
 
-//change password
+// route for logout
+commonApp.get("/logout", (req, res) => {
+  // delete the teoken from the cookie storage
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+});
 
+// Page for refresh
+commonApp.get(
+  "/check-auth",
+  verifyToken("USER", "AUTHOR", "ADMIN"),
+  (req, res) => {
+    res.status(200).json({
+      message: "authenticated",
+      payload: req.user,
+    });
+  },
+);
+
+// change the password
 commonApp.put(
   "/password",
-  verifyToken("USER", "AUTHOR", "ADMIN"),
+  verifyToken("ADMIN", "AUTHOR", "USER"),
   async (req, res) => {
+    // check if current and new Passwords are same
     const { currentPassword, newPassword } = req.body;
-    //chx current password and new password
+
     if (currentPassword === newPassword) {
-      return res.status(400).json({
-        message: "New password must be different from current password",
+      return res.json({
+        message: "Current and new passwords should not be the same",
       });
     }
-    //get id of ()
-    const id = req.user._id;
-    //get document of user from database
-    const userDoc = await UserModel.findById(id);
 
-    // get current password of ()
-    const password = userDoc.password;
-    //chx if currnt password of user and req and user are same
-    if (!password === currentPassword) {
-      return res.status().json({ message: "you entered the wrong password" });
+    // get current password from the role loggedin
+    const userId = req.user?.id;
+
+    // find the user
+    const user = await UserModel.findById(userId);
+
+    const isMatched = await compare(currentPassword, user.password);
+
+    //chck the current paswword of logged in role and req are same/not
+    if (!isMatched) {
+      return res
+        .status(400)
+        .json({ message: "Current password is not matching" });
     }
-    //change password in database
-    newPassword=hash(newPassword,12);
-    //replace the currenet password
-      userDoc.password=newPassword;
-      await userDoc.save()
-      //send res
-      res.status(200).json({message:"Password changed successfully"})
 
+    //hash the password
+    const hashedPassword = await hash(newPassword, 12);
+
+    //replace the password and save
+    user.password = hashedPassword;
+    user.save();
+
+    //send res
+    res.status(200).json({ message: "Password updated" });
   },
 );

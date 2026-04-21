@@ -1,36 +1,31 @@
+// create mini applications
 import exp from "express";
+import { UserModel } from "../models/UserModel.js";
+import { ArticleModel } from "../models/ArticleModel.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 export const authorApp = exp.Router();
 
-import { UserModel } from "../models/userModel.js";
-import { ArticleModel } from "../models/articleModel.js";
-import { verifyToken } from "../middleware/verifyToken.js";
-
-//to post an article, the user must be an author, so we will verify the token and check the role of the user
+// write article
 authorApp.post("/article", verifyToken("AUTHOR"), async (req, res) => {
-  let articleObj = req.user;
-  //check author
-  let author2 = await UserModel.findById(articleObj.author);
-  if (author2.email != user.email) {
-    return res.status(403).json({ message: "You are not authorized " });
-  }
-  let author = UserModel.findById(articleObj.author);
+  // get token
+  const token = req.user;
+  // get the article object
+  const articleObj = req.body;
+  // check author
+  let author = await UserModel.findById(articleObj.author);
   if (!author) {
-    res.status(404).json({ message: "no user found" });
+    return res.status(404).json({ message: "Invalid author..." });
   }
-  if (author.role !== "AUTHOR") {
-    return res
-      .status(403)
-      .json({ message: "only author can publish articles" });
+  if (author.email !== token.email) {
+    return res.status(403).json({ message: "you are unauthorized..." });
   }
-
-  //create article document and save
-  const articleDoc = new ArticleModel(articleObj);
-  //save
-  await articleDoc.save();
-  //send res
-  res.status(200).json({ message: "Article created" });
+  // create atricle document
+  const articleDocument = new ArticleModel(articleObj);
+  // save the doc
+  await articleDocument.save();
+  // send res
+  res.status(201).json({ message: "Article published" });
 });
-
 // read own articles
 authorApp.get("/articles", verifyToken("AUTHOR"), async (req, res) => {
   // get the token
@@ -38,7 +33,7 @@ authorApp.get("/articles", verifyToken("AUTHOR"), async (req, res) => {
 
   // list of areticle published by him
   const articlesList = await ArticleModel.find({ author: id });
-  res.json({ message: "Ur articles", payload: articlesList });
+  res.status(200).json({ message: "Ur articles", payload: articlesList });
 });
 
 // Edit article
@@ -60,7 +55,22 @@ authorApp.put("/articles", verifyToken("AUTHOR"), async (req, res) => {
   res.status(200).json({ message: "Ur article is modified", payload: article });
 });
 
-// authorApp.delete('/articles',verifyToken("AUTHOR"),async(req,res)=>{
-// const{articleId,isArticleActive} = req.body;
-// const aritcleOfDB=await
-// })
+// delete an article(SOFT DELETE)
+authorApp.patch("/articles", verifyToken("AUTHOR"), async (req, res) => {
+  // get author id from token
+  const id = req.user?.id;
+  //get modified article from req
+  const { articleId, isArticleActive } = req.body;
+  // find the article
+  const article = await ArticleModel.findOne({ _id: articleId, author: id });
+  // check for the existing active status
+  if (article.isArticleActive === isArticleActive) {
+    return res.status(200).json("Already in same state");
+  }
+
+  article.isArticleActive = isArticleActive;
+  await article.save();
+  if (!isArticleActive)
+    return res.status(200).json({ message: "deleted the article" });
+  res.status(200).json({ message: "recovered the article" });
+});

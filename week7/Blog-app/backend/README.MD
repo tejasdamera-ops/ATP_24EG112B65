@@ -18,8 +18,5 @@ author
 title
 category
 content
-comments
-6. implement apis
-7. create common apis for register ,login.logout
+comments 6. implement apis 7. create common apis for register ,login.logout
 csrf, attack xss
-  admin password :admin 
