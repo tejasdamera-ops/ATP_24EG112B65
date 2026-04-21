@@ -1,8 +1,8 @@
 // create mini applications
 import exp from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
-import { ArticleModel } from "../models/ArticleModel.js";
-import { UserModel } from "../models/UserModel.js";
+import { ArticleModel } from "../models/articleModel.js";
+import { UserModel } from "../models/userModel.js";
 export const adminApp = exp.Router();
 
 // ROUTE TO READ ALL users

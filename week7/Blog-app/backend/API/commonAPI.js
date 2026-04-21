@@ -1,6 +1,6 @@
 // create mini applications
 import exp from "express";
-import { UserModel } from "../models/UserModel.js";
+import { UserModel } from "../models/userModel.js";
 import { hash, compare } from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { userApp } from "./UserAPI.js";

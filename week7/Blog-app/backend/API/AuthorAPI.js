@@ -1,7 +1,7 @@
 // create mini applications
 import exp from "express";
-import { UserModel } from "../models/UserModel.js";
-import { ArticleModel } from "../models/ArticleModel.js";
+import { UserModel } from "../models/userModel.js";
+import { ArticleModel } from "../models/articleModel.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 export const authorApp = exp.Router();
 
