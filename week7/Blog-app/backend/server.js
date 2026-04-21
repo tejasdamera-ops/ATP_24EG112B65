@@ -21,9 +21,24 @@ app.use(
   }),
 );
 
+// body parser middleware
+app.use(exp.json());
+app.use(cookieParser());
+
+// root route for health checks
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Blog API Server is running" });
+});
+
+//path level middleware
+app.use("/user-api", userApp);
+app.use("/author-api", authorApp);
+app.use("/admin-api", adminApp);
+app.use("/auth", commonApp);
+
 // assign port
 
-// connect to db
+// conchx aganect to db
 const connectDB = async () => {
   try {
     await connect(process.env.DB_URL);
@@ -37,16 +52,6 @@ const connectDB = async () => {
 };
 
 connectDB();
-
-// body parser middleware
-app.use(exp.json());
-app.use(cookieParser());
-
-//path level middleware
-app.use("/user-api", userApp);
-app.use("/author-api", authorApp);
-app.use("/admin-api", adminApp);
-app.use("/auth", commonApp);
 
 //to handle invalid path
 app.use((req, res, next) => {
