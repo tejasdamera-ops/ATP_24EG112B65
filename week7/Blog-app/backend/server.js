@@ -83,6 +83,14 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
 
+  // Respect explicit HTTP errors raised in middleware/controllers.
+  if (err.status && Number.isInteger(err.status)) {
+    return res.status(err.status).json({
+      message: "error occurred",
+      error: err.message,
+    });
+  }
+
   // ValidationError
   if (err.name === "ValidationError") {
     return res.status(400).json({
@@ -96,6 +104,19 @@ app.use((err, req, res, next) => {
     return res.status(400).json({
       message: "error occurred",
       error: err.message,
+    });
+  }
+
+  // Multer file upload errors (size limit, invalid multipart, etc.)
+  if (err.name === "MulterError") {
+    const uploadErrorMap = {
+      LIMIT_FILE_SIZE: "Profile image must be 2MB or smaller",
+      LIMIT_UNEXPECTED_FILE: "Unexpected file field in upload",
+    };
+
+    return res.status(400).json({
+      message: "error occurred",
+      error: uploadErrorMap[err.code] || err.message,
     });
   }
 
