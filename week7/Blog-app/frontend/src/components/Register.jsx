@@ -58,7 +58,14 @@ const navigate = useNavigate();
       }
     } catch (err) {
       console.log("err in registration", err);
-      setApiError(err.response?.data?.error || "Registration failed");
+      const backendMessage =
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        err.message;
+      setApiError(
+        backendMessage ||
+          "Registration failed. Please try again after some time.",
+      );
     } finally {
       setLoading(false);
     }
