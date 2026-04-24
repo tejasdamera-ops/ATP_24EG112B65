@@ -12,12 +12,32 @@ import cors from "cors";
 config();
 const app = exp();
 
+const defaultAllowedOrigins = [
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
+
+const envOrigins = (process.env.FRONTEND_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...envOrigins])];
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: (origin, callback) => {
+      // Allow non-browser requests (no Origin header) like health checks.
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      // Allow Vercel production and preview deployments.
+      if (origin.endsWith(".vercel.app")) return callback(null, true);
+
+      return callback(new Error("CORS: origin not allowed"));
+    },
     credentials: true,
-    //methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    //allowedHeaders: ["Content-Type", "Authorization"]
   }),
 );
 
