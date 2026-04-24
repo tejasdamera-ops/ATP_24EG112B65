@@ -34,7 +34,7 @@ function ArticleByID() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const user = useAuth((state) => state.currentUser);
 
@@ -110,16 +110,22 @@ function ArticleByID() {
   };
 
   const addComment = async (commentObj) => {
-    commentObj.articleId = article._id;
+    const trimmedComment = commentObj.comment?.trim();
+    if (!trimmedComment) return;
 
-    let res = await axios.put(
-      buildApiUrl("/articles"),
-      commentObj,
-      { withCredentials: true }
-    );
+    try {
+      const res = await axios.put(
+        buildApiUrl("/user-api/articles"),
+        { articleId: article._id, comment: trimmedComment },
+        { withCredentials: true }
+      );
 
-    if (res.status === 200) {
-      setArticle(res.data.payload);
+      if (res.status === 200) {
+        setArticle(res.data.payload);
+        reset({ comment: "" });
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to add comment");
     }
   };
 
