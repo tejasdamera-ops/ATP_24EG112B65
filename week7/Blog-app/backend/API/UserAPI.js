@@ -11,6 +11,9 @@ userApp.get("/articles", verifyToken("USER"), async (req, res) => {
   const userId = req.user?.id;
   // find user
   const user = await UserModel.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
   if (!user.isUserActive) {
     return res
       .status(400)

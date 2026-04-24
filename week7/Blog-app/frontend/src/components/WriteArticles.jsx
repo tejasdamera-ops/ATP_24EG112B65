@@ -12,10 +12,10 @@ import {
   submitBtn,
   errorClass,
   loadingClass,
-} from "../styles/common";
-
-import { useAuth } from "../stores/authStore";
+} from "../styles/Common";
+import { useAuth } from "../store/authStore";
 import toast from "react-hot-toast";
+import { buildApiUrl } from "../config/api";
 
 function WriteArticles() {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ function WriteArticles() {
 
     try {
       let res = await axios.post(
-        "https://atp-24eg112c38-2.onrender.com/author-api/article",
+        buildApiUrl("/author-api/article"),
         articleObj,
         { withCredentials: true }
       );

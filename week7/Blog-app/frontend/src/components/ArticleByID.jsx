@@ -1,7 +1,7 @@
 import { useParams, useLocation, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../stores/authStore.js";
+import { useAuth } from "../store/authStore";
 import { useForm } from "react-hook-form";
 
 import {
@@ -27,7 +27,8 @@ import {
   commentUser,
   commentTime,
   commentText,
-} from "../styles/common.js";
+} from "../styles/Common.js";
+import { buildApiUrl } from "../config/api";
 
 function ArticleByID() {
   const { id } = useParams();
@@ -49,8 +50,8 @@ function ArticleByID() {
 
       try {
         const res = await axios.get(
-          `https://atp-24eg112c38-2.onrender.com/user-api/article/${id}`,
-          { withCredentials: true },
+          buildApiUrl(`/user-api/article/${id}`),
+          { withCredentials: true }
         );
 
         setArticle(res.data.payload);
@@ -83,12 +84,12 @@ function ArticleByID() {
 
     try {
       const res = await axios.patch(
-        `https://atp-24eg112c38-2.onrender.com/author-api/articles`,
+        buildApiUrl("/author-api/articles"),
         {
           articleId: article._id,
           isArticleActive: newStatus,
         },
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       setArticle(res.data.payload);
@@ -112,9 +113,9 @@ function ArticleByID() {
     commentObj.articleId = article._id;
 
     let res = await axios.put(
-      "https://atp-24eg112c38-2.onrender.com/user-api/articles",
+      buildApiUrl("/articles"),
       commentObj,
-      { withCredentials: true },
+      { withCredentials: true }
     );
 
     if (res.status === 200) {
@@ -123,31 +124,26 @@ function ArticleByID() {
   };
 
   if (loading)
-    return (
-      <p className={loadingClass + " text-center px-4"}>Loading article...</p>
-    );
+    return <p className={loadingClass + " text-center px-4"}>Loading article...</p>;
 
-  if (error) return <p className={errorClass + " text-center px-4"}>{error}</p>;
+  if (error)
+    return <p className={errorClass + " text-center px-4"}>{error}</p>;
 
   if (!article) return null;
 
   return (
-    <div
-      className={`${articlePageWrapper} px-4 sm:px-6 py-6 sm:py-10 max-w-4xl mx-auto`}
-    >
+    <div className={`${articlePageWrapper} px-4 sm:px-6 py-6 sm:py-10 max-w-4xl mx-auto`}>
+
       {/* Header */}
       <div className={`${articleHeader} space-y-3 sm:space-y-4`}>
+
         <span className={articleCategory}>{article.category}</span>
 
-        <h1
-          className={`${articleMainTitle} uppercase text-lg sm:text-2xl md:text-3xl`}
-        >
+        <h1 className={`${articleMainTitle} uppercase text-lg sm:text-2xl md:text-3xl`}>
           {article.title}
         </h1>
 
-        <div
-          className={`${articleAuthorRow} flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm`}
-        >
+        <div className={`${articleAuthorRow} flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm`}>
           <div className={authorInfo}>✍ {user.role}</div>
           <div>{formatDate(article.createdAt)}</div>
         </div>
@@ -160,32 +156,25 @@ function ArticleByID() {
 
       {/* AUTHOR actions */}
       {user?.role === "AUTHOR" && (
-        <div
-          className={`${articleActions} flex flex-col sm:flex-row gap-3 mt-4`}
-        >
-          <button
-            className={`${editBtn} w-full sm:w-auto`}
-            onClick={() => editArticle(article)}
-          >
+        <div className={`${articleActions} flex flex-col sm:flex-row gap-3 mt-4`}>
+
+          <button className={`${editBtn} w-full sm:w-auto`} onClick={() => editArticle(article)}>
             Edit
           </button>
 
-          <button
-            className={`${deleteBtn} w-full sm:w-auto`}
-            onClick={toggleArticleStatus}
-          >
+          <button className={`${deleteBtn} w-full sm:w-auto`} onClick={toggleArticleStatus}>
             {article.isArticleActive ? "Delete" : "Restore"}
           </button>
+
         </div>
       )}
 
       {/* USER actions */}
       {user?.role === "USER" && (
         <div className={`${articleActions} mt-4`}>
-          <form
-            onSubmit={handleSubmit(addComment)}
-            className="flex flex-col sm:flex-row gap-3"
-          >
+
+          <form onSubmit={handleSubmit(addComment)} className="flex flex-col sm:flex-row gap-3">
+
             <input
               type="text"
               {...register("comment")}
@@ -199,14 +188,19 @@ function ArticleByID() {
             >
               Add comment
             </button>
+
           </form>
+
         </div>
       )}
 
       {/* comments */}
       <div className={`${commentsWrapper} mt-6 sm:mt-8`}>
+
         {(!article.comment || article.comment.length === 0) && (
-          <p className="text-[#a1a1a6] text-sm text-center">No comments yet</p>
+          <p className="text-[#a1a1a6] text-sm text-center">
+            No comments yet
+          </p>
         )}
 
         {article.comment?.map((commentObj, index) => {
@@ -215,8 +209,10 @@ function ArticleByID() {
 
           return (
             <div key={index} className={`${commentCard} p-3 sm:p-4`}>
+
               <div className={commentHeader}>
                 <div className={commentUserRow}>
+
                   <div className={`${avatar} w-8 h-8 sm:w-10 sm:h-10`}>
                     {firstLetter}
                   </div>
@@ -229,12 +225,14 @@ function ArticleByID() {
                       {formatDate(commentObj.createdAt || new Date())}
                     </p>
                   </div>
+
                 </div>
               </div>
 
               <p className={`${commentText} text-sm sm:text-base`}>
                 {commentObj.comment}
               </p>
+
             </div>
           );
         })}
@@ -244,6 +242,7 @@ function ArticleByID() {
       <div className={`${articleFooter} text-xs sm:text-sm mt-6`}>
         Last updated: {formatDate(article.updatedAt)}
       </div>
+
     </div>
   );
 }

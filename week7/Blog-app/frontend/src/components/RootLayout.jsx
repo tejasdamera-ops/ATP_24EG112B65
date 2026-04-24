@@ -1,18 +1,27 @@
-import React from 'react'
-import { Outlet } from 'react-router'
-import Header from './Header'
-import Footer from './Footer'
+import Header from './Header';
+import Footer from './Footer';
+import { Outlet } from 'react-router';
 
-const RootLayout = () => {
+import {useAuth} from '../store/authStore'
+import { useEffect } from 'react';
+
+function RootLayout() {
+  
+  const checkAuth = useAuth((state) => state.checkAuth);
+
+useEffect(() => {
+  checkAuth();
+}, []);
+
   return (
     <div>
-      <Header/>
-      <div>
-        <Outlet/>
+      <Header />
+      <div className="min-h-screen mx-32">
+        <Outlet />
       </div>
-      <Footer/>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default RootLayout
+export default RootLayout;

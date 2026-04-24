@@ -1,8 +1,9 @@
 import { NavLink, Outlet, useNavigate } from "react-router";
-import { useAuth } from "../stores/authStore.js";
+import { useAuth } from "../store/authStore";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { articleTitle } from "../styles/common.js";
+import { articleTitle } from "../styles/Common.js";
+import { buildApiUrl } from "../config/api";
 
 function AdminProfile() {
   const currentUser = useAuth((state) => state.currentUser);
@@ -21,18 +22,18 @@ function AdminProfile() {
   const handleToggleStatus = async (userId, currentStatus) => {
     try {
       await axios.patch(
-        "https://atp-24eg112c38-2.onrender.com/admin-api/users",
+        buildApiUrl("/users"),
         {
           userId: userId,
           isUserActive: !currentStatus,
         },
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       setUsers((prev) =>
         prev.map((u) =>
-          u._id === userId ? { ...u, isUserActive: !currentStatus } : u,
-        ),
+          u._id === userId ? { ...u, isUserActive: !currentStatus } : u
+        )
       );
     } catch (err) {
       console.log(err);
@@ -44,8 +45,8 @@ function AdminProfile() {
       setLoading(true);
       try {
         let res = await axios.get(
-          "https://atp-24eg112c38-2.onrender.com/admin-api/users",
-          { withCredentials: true },
+          buildApiUrl("/admin-api/users"),
+          { withCredentials: true }
         );
 
         if (res.status === 200) {
@@ -63,10 +64,13 @@ function AdminProfile() {
 
   return (
     <div className="min-h-screen bg-gray-50 px-4 sm:px-6 py-6 sm:py-10">
+
       {/* HEADER */}
       <div className="bg-white border border-[#e8e8ed] rounded-2xl sm:rounded-3xl p-4 sm:p-6 mb-6 sm:mb-10 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+
         {/* LEFT */}
         <div className="flex items-center gap-3 sm:gap-4">
+
           {currentUser?.profileImageUrl ? (
             <img
               src={currentUser.profileImageUrl}
@@ -80,7 +84,9 @@ function AdminProfile() {
           )}
 
           <div>
-            <p className="text-xs sm:text-sm text-[#6e6e73]">Welcome back</p>
+            <p className="text-xs sm:text-sm text-[#6e6e73]">
+              Welcome back
+            </p>
             <h2 className="text-lg sm:text-xl font-semibold text-[#1d1d1f]">
               {currentUser?.firstName}
             </h2>
@@ -110,6 +116,7 @@ function AdminProfile() {
 
       {/* USERS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+
         {users.map(
           (userObj) =>
             userObj.role !== "ADMIN" && (
@@ -117,6 +124,7 @@ function AdminProfile() {
                 key={userObj._id}
                 className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between"
               >
+
                 {/* NAME */}
                 <h3 className={`${articleTitle} text-base sm:text-lg`}>
                   {userObj.firstName}
@@ -150,7 +158,7 @@ function AdminProfile() {
                   {userObj.isUserActive ? "Block" : "Unblock"}
                 </button>
               </div>
-            ),
+            )
         )}
       </div>
     </div>

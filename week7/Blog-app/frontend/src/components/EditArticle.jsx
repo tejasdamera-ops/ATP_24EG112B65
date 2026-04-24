@@ -12,7 +12,8 @@ import {
   submitBtn,
   errorClass,
   articlePageWrapper,
-} from "../styles/common";
+} from "../styles/Common";
+import { buildApiUrl } from "../config/api";
 
 function EditArticle() {
   const location = useLocation();
@@ -43,7 +44,7 @@ function EditArticle() {
     modifiedArticle.articleId = article._id;
 
     let res = await axios.put(
-      "https://atp-24eg112c38-2.onrender.com/author-api/articles",
+      buildApiUrl("/author-api/articles"),
       modifiedArticle,
       { withCredentials: true }
     );

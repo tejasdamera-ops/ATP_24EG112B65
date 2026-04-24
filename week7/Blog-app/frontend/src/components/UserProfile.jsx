@@ -1,4 +1,4 @@
-import { useAuth } from "../stores/authStore";
+import { useAuth } from "../store/authStore";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -11,7 +11,8 @@ import {
   loadingClass,
   errorClass,
   timestampClass,
-} from "../styles/common.js";
+} from "../styles/Common.js";
+import { buildApiUrl } from "../config/api";
 
 function UserProfile() {
   const logout = useAuth((state) => state.logout);
@@ -27,7 +28,7 @@ function UserProfile() {
       setLoading(true);
       try {
         let res = await axios.get(
-          "https://atp-24eg112c38-2.onrender.com/user-api/articles",
+          buildApiUrl("/user-api/articles"),
           { withCredentials: true }
         );
 

@@ -11,10 +11,10 @@ import {
   errorClass,
   mutedText,
   linkClass,
-} from "../styles/common";
+} from "../styles/Common";
 
 import { NavLink, useNavigate } from "react-router";
-import { useAuth } from "../stores/authStore";
+import { useAuth } from "../store/authStore";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 

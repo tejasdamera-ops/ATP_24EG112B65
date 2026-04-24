@@ -32,7 +32,7 @@ commonApp.post(
       /// upload image to cloudinary from memoryStorage
       if (req.file) {
         try {
-          const cloudinaryResult = await uploadToCloudinary(req.file.buffer);
+          cloudinaryResult = await uploadToCloudinary(req.file.buffer);
           newUser.profileImageUrl = cloudinaryResult?.secure_url;
         } catch (err) {
           newUser.profileImageUrl = "";
@@ -40,9 +40,6 @@ commonApp.post(
       } else {
         newUser.profileImageUrl = "";
       }
-
-      // add CDN link of image to new userObj
-      newUser.profileImageUrl = cloudinaryResult?.secure_url;
 
       // RUN VALIDATORS MANUALLY
 
@@ -154,6 +151,9 @@ commonApp.put(
 
     // find the user
     const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const isMatched = await compare(currentPassword, user.password);
 
@@ -169,7 +169,7 @@ commonApp.put(
 
     //replace the password and save
     user.password = hashedPassword;
-    user.save();
+    await user.save();
 
     //send res
     res.status(200).json({ message: "Password updated" });

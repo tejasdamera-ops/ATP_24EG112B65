@@ -1,5 +1,5 @@
 import { NavLink } from "react-router";
-import { useAuth } from "../stores/authStore";
+import { useAuth } from "../store/authStore";
 import { useState } from "react";
 
 import {
@@ -9,7 +9,7 @@ import {
   navLinksClass,
   navLinkClass,
   navLinkActiveClass,
-} from "../styles/common";
+} from "../styles/Common";
 
 function Header() {
   const isAuthenticated = useAuth((state) => state.isAuthenticated);

@@ -1,16 +1,21 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-
-import React from "react";
 import RootLayout from "./components/RootLayout";
 import Home from "./components/Home";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import UserProfile from "./components/UserProfile";
 import AuthorProfile from "./components/AuthorProfile";
-import AdminProfile from "./components/AdminProfile";
-import Articles from "./components/Articles";
+import AuthorArticles from "./components/AuthorArticles";
+import EditArticle from './components/EditArticle'
+import WriteArticles from "./components/WriteArticles";
+import ArticleByID from "./components/ArticleByID";
+import AdminProfile from './components/AdminProfile'
+import Unauthorized from "./components/Unauthorized";
 
-const App = () => {
+import {Toaster} from 'react-hot-toast'
+import ProtectedRoute from "./components/ProtectedRoute";
+
+function App() {
   const routerObj = createBrowserRouter([
     {
       path: "/",
@@ -21,36 +26,64 @@ const App = () => {
           element: <Home />,
         },
         {
-          path: "/register",
+          path: "register",
           element: <Register />,
         },
         {
-          path: "/login",
+          path: "login",
           element: <Login />,
         },
         {
-            path:"/userProfile",
-            element:<UserProfile/>
+          path: "user-profile",
+          element: <ProtectedRoute allowedRoles={["USER"]}>
+            <UserProfile />
+          </ProtectedRoute>,
         },
         {
-            path:"/authorProfile",
-            element:<AuthorProfile/>
+          path: "author-profile",
+          element:<ProtectedRoute allowedRoles={["AUTHOR"]}>
+            <AuthorProfile />
+          </ProtectedRoute>,
+
+          children: [
+            {
+              index: true,
+              element: <AuthorArticles />,
+            },
+            {
+              path: "articles",
+              element: <AuthorArticles />,
+            },
+            {
+              path: "write-article",
+              element: <WriteArticles />,
+            },
+          ],
         },
         {
-            path:"/adminProfile",
-            element:<AdminProfile/>
+          path: "article/:id",
+          element: <ArticleByID />,
         },
         {
-            path:"/article",
-            element:<Articles/>
+          path: "edit-article",
+          element: <EditArticle />,
         },
-        
+        {
+          path:"admin-profile",
+          element: <ProtectedRoute allowedRoles={["ADMIN"]}><AdminProfile/></ProtectedRoute>,
+        },
+        {
+          path:"unauthorized",
+          element:<Unauthorized/>,
+        }
       ],
     },
   ]);
-  return <div>
-    <RouterProvider router={routerObj}/>
-  </div>;
-};
+
+  return ( <div> 
+    <Toaster position="top-center" reverseOrder={false}/>
+    <RouterProvider router={routerObj} />
+  </div>)
+}
 
 export default App;

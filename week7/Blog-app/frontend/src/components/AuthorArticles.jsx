@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
-import { useAuth } from "../stores/authStore";
+import { useAuth } from "../store/authStore";
 
 import {
   articleCardClass,
@@ -14,7 +14,8 @@ import {
   emptyStateClass,
   articleStatusActive,
   articleStatusDeleted,
-} from "../styles/common";
+} from "../styles/Common";
+import { buildApiUrl } from "../config/api";
 
 function AuthorArticles() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ function AuthorArticles() {
       try {
         setLoading(true);
        //read articles of current author
-       let res= await axios.get("https://atp-24eg112c38-2.onrender.com/author-api/articles",{withCredentials:true})
+       let res= await axios.get(buildApiUrl("/author-api/articles"),{withCredentials:true})
        //update articles state
        if(res.status===200)
         setArticles(res.data?.payload);

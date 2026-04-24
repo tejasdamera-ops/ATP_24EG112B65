@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Articles = () => {
+function Articles() {
   return (
     <div>Articles</div>
   )
