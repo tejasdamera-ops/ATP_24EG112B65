@@ -36,6 +36,20 @@ authorApp.get("/articles", verifyToken("AUTHOR"), async (req, res) => {
   res.status(200).json({ message: "Ur articles", payload: articlesList });
 });
 
+// read single own article
+authorApp.get("/article/:id", verifyToken("AUTHOR"), async (req, res) => {
+  const article = await ArticleModel.findOne({
+    _id: req.params.id,
+    author: req.user?.id,
+  }).populate("comment.user");
+
+  if (!article) {
+    return res.status(404).json({ message: "Article not found" });
+  }
+
+  res.status(200).json({ message: "Article found", payload: article });
+});
+
 // Edit article
 authorApp.put("/articles", verifyToken("AUTHOR"), async (req, res) => {
   const id = req.user?.id;
@@ -73,7 +87,43 @@ authorApp.patch("/articles", verifyToken("AUTHOR"), async (req, res) => {
 
   article.isArticleActive = isArticleActive;
   await article.save();
-  if (!isArticleActive)
-    return res.status(200).json({ message: "deleted the article" });
-  res.status(200).json({ message: "recovered the article" });
+  await article.populate("comment.user");
+
+  if (!isArticleActive) {
+    return res
+      .status(200)
+      .json({ message: "deleted the article", payload: article });
+  }
+  res.status(200).json({ message: "recovered the article", payload: article });
+});
+
+// delete a comment on own article
+authorApp.delete("/articles/comment", verifyToken("AUTHOR"), async (req, res) => {
+  const { articleId, commentId } = req.body;
+
+  if (!articleId || !commentId) {
+    return res.status(400).json({ message: "articleId and commentId are required" });
+  }
+
+  const articleDoc = await ArticleModel.findOne({
+    _id: articleId,
+    author: req.user?.id,
+  });
+
+  if (!articleDoc) {
+    return res
+      .status(403)
+      .json({ message: "You are unauthorized to moderate this article" });
+  }
+
+  const commentDoc = articleDoc.comment.id(commentId);
+  if (!commentDoc) {
+    return res.status(404).json({ message: "Comment not found" });
+  }
+
+  articleDoc.comment.pull(commentId);
+  await articleDoc.save();
+  await articleDoc.populate("comment.user");
+
+  res.status(200).json({ message: "Comment deleted", payload: articleDoc });
 });

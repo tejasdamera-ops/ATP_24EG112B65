@@ -45,6 +45,18 @@ Content-Type: application/json
     "isArticleActive":false
 }
 
+### read single own article
+GET http://localhost:5000/author-api/article/69b3cec07a95fff64d02464f
+
+### delete comment on own article
+DELETE http://localhost:5000/author-api/articles/comment
+Content-Type: application/json
+
+{
+    "articleId":"69b3cec07a95fff64d02464f",
+    "commentId":"COMMENT_ID_HERE"
+}
+
 ### login
 POST http://localhost:5000/auth/login
 Content-Type: application/json

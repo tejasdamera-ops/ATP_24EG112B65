@@ -114,5 +114,13 @@ export const avatar =
 
 export const commentUserRow = "flex items-center gap-3";
 
+export const commentActions = "flex gap-2 mt-2";
+
+export const commentActionBtn =
+  "text-xs font-medium text-[#0066cc] hover:text-[#004499] transition-colors cursor-pointer";
+
+export const commentDeleteBtn =
+  "text-xs font-medium text-[#ff3b30] hover:text-[#d62c23] transition-colors cursor-pointer";
+
 // ─── Divider ──────────────────────────────────────────
 export const divider = "border-t border-[#e8e8ed] my-10";
