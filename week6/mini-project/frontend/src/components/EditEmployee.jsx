@@ -113,7 +113,7 @@ function EditEmployee() {
 
         <button
           type="submit"
-          className="mt-4 inline-flex w-full items-center justify-center rounded-3xl bg-emerald-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-emerald-700"
+          className="mt-4 inline-flex w-full items-center justify-center rounded-3xl bg-slate-900 px-6 py-4 text-base font-semibold text-white transition hover:bg-slate-800"
         >
           Save Changes
         </button>

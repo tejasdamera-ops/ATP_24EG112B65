@@ -9,61 +9,62 @@ function Home() {
 
   return (
     <section className="space-y-10">
-      <div className="rounded-[2rem] border border-slate-200 bg-white/90 p-8 shadow-xl shadow-slate-200/80 backdrop-blur-xl">
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div className="grid gap-8 lg:grid-cols-[1.5fr_1fr] lg:items-center">
           <div>
-            <span className="inline-flex rounded-full bg-sky-100 px-4 py-1 text-sm font-semibold text-sky-700">
+            <span className="inline-flex rounded-full bg-slate-100 px-4 py-1 text-sm font-semibold text-slate-700">
               Employee management made simple
             </span>
             <h1 className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
-              Keep your team organized with clean employee cards and fast
-              actions.
+              Keep your team organized with clean employee cards.
             </h1>
-            <p className="mt-4 max-w-xl text-lg leading-8 text-slate-600">
-              Add, view, edit, and delete employee records from a modern
-              dashboard experience built for clarity and speed.
+            <p className="mt-4 max-w-xl text-base leading-8 text-slate-600">
+              Add, view, edit, and delete employee details in a calm,
+              easy-to-scan interface.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <button
                 onClick={() => navigate("create-emp")}
-                className="rounded-full bg-sky-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-sky-700"
+                className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
               >
                 Create Employee
               </button>
               <button
                 onClick={() => navigate("list")}
-                className="rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+                className="rounded-full border border-slate-200 bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
               >
                 View Employees
               </button>
             </div>
           </div>
 
-          <div className="rounded-[2rem] bg-slate-950 p-8 text-white shadow-2xl shadow-slate-900/20">
-            <p className="text-sm uppercase tracking-[0.3em] text-slate-400">
-              Live stats
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
+              Quick stats
             </p>
-            <div className="mt-6 space-y-6">
-              <div className="rounded-3xl bg-slate-900/80 p-6">
-                <p className="text-sm text-slate-400">Active counter</p>
-                <h2 className="mt-2 text-4xl font-semibold">{newCounter}</h2>
+            <div className="mt-6 space-y-4 text-slate-700">
+              <div className="rounded-3xl bg-white px-5 py-4 shadow-sm">
+                <p className="text-sm text-slate-500">Active counter</p>
+                <h2 className="mt-2 text-3xl font-semibold text-slate-900">
+                  {newCounter}
+                </h2>
                 <button
                   onClick={newCounterSet}
-                  className="mt-4 inline-flex rounded-full bg-sky-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-400"
+                  className="mt-4 inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
                 >
-                  Increment counter
+                  Increment
                 </button>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-3xl bg-slate-900/80 p-4">
-                  <p className="text-sm text-slate-400">Current User</p>
-                  <p className="mt-2 text-xl font-semibold">
+                <div className="rounded-3xl bg-white px-5 py-4 shadow-sm">
+                  <p className="text-sm text-slate-500">Current user</p>
+                  <p className="mt-2 text-xl font-semibold text-slate-900">
                     {user?.name || "Guest"}
                   </p>
                 </div>
-                <div className="rounded-3xl bg-slate-900/80 p-4">
-                  <p className="text-sm text-slate-400">Designation</p>
-                  <p className="mt-2 text-xl font-semibold">
+                <div className="rounded-3xl bg-white px-5 py-4 shadow-sm">
+                  <p className="text-sm text-slate-500">Designation</p>
+                  <p className="mt-2 text-xl font-semibold text-slate-900">
                     {user?.designation || "Not set"}
                   </p>
                 </div>
@@ -73,26 +74,23 @@ function Home() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
-        <article className="overflow-hidden rounded-[1.75rem] bg-sky-600 px-6 py-8 text-white shadow-xl shadow-sky-300/20">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <article className="rounded-3xl border border-slate-200 bg-slate-50 px-6 py-8 text-slate-800 shadow-sm">
           <h2 className="text-xl font-semibold">Fast onboarding</h2>
-          <p className="mt-3 text-sm leading-6 text-sky-100">
-            Add employee details quickly with a beautiful form and instant
-            validation.
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Add employee details quickly with a straightforward form.
           </p>
         </article>
-        <article className="overflow-hidden rounded-[1.75rem] bg-emerald-600 px-6 py-8 text-white shadow-xl shadow-emerald-300/20">
+        <article className="rounded-3xl border border-slate-200 bg-slate-50 px-6 py-8 text-slate-800 shadow-sm">
           <h2 className="text-xl font-semibold">Responsive layout</h2>
-          <p className="mt-3 text-sm leading-6 text-emerald-100">
-            The dashboard adapts smoothly to mobile and desktop screens so your
-            team stays productive.
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            The interface adapts smoothly across mobile and desktop screens.
           </p>
         </article>
-        <article className="overflow-hidden rounded-[1.75rem] bg-indigo-600 px-6 py-8 text-white shadow-xl shadow-indigo-300/20">
-          <h2 className="text-xl font-semibold">Clear employee cards</h2>
-          <p className="mt-3 text-sm leading-6 text-indigo-100">
-            Browse employee information with easy actions for view, edit, and
-            delete.
+        <article className="rounded-3xl border border-slate-200 bg-slate-50 px-6 py-8 text-slate-800 shadow-sm">
+          <h2 className="text-xl font-semibold">Simple employee cards</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Browse staff information with calm typography and clear actions.
           </p>
         </article>
       </div>
