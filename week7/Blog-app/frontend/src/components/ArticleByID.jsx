@@ -61,22 +61,23 @@ function ArticleByID() {
     String(getCommentUserId(commentObj)) === String(user?.id);
 
   useEffect(() => {
-    if (!user) return;
-
     const getArticle = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const endpoint =
-          user.role === "AUTHOR"
-            ? `/author-api/article/${id}`
-            : `/user-api/article/${id}`;
+        let endpoint = `/public-api/article/${id}`;
+        const config = {};
 
-        const res = await axios.get(buildApiUrl(endpoint), {
-          withCredentials: true,
-        });
+        if (user?.role === "AUTHOR") {
+          endpoint = `/author-api/article/${id}`;
+          config.withCredentials = true;
+        } else if (user?.role === "USER") {
+          endpoint = `/user-api/article/${id}`;
+          config.withCredentials = true;
+        }
 
+        const res = await axios.get(buildApiUrl(endpoint), config);
         setArticle(res.data.payload);
       } catch (err) {
         setError(
@@ -131,7 +132,16 @@ function ArticleByID() {
     navigate("/edit-article", { state: articleObj });
   };
 
+  const promptLoginToComment = () => {
+    toast.error("Please login");
+  };
+
   const addComment = async (commentObj) => {
+    if (!user || user.role !== "USER") {
+      promptLoginToComment();
+      return;
+    }
+
     const trimmedComment = commentObj.comment?.trim();
     if (!trimmedComment) return;
 
@@ -251,12 +261,20 @@ function ArticleByID() {
         </div>
       )}
 
-      {/* USER comment form */}
-      {user?.role === "USER" && article.isArticleActive && (
+      {/* Comment form — logged-in users can post; guests see login prompt */}
+      {article.isArticleActive && (
         <div className={`${articleActions} mt-4`}>
-
-          <form onSubmit={handleSubmit(addComment)} className="flex flex-col sm:flex-row gap-3">
-
+          <form
+            onSubmit={
+              user?.role === "USER"
+                ? handleSubmit(addComment)
+                : (e) => {
+                    e.preventDefault();
+                    promptLoginToComment();
+                  }
+            }
+            className="flex flex-col sm:flex-row gap-3"
+          >
             <input
               type="text"
               {...register("comment")}
@@ -270,9 +288,7 @@ function ArticleByID() {
             >
               Add comment
             </button>
-
           </form>
-
         </div>
       )}
 

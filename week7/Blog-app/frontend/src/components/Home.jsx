@@ -1,6 +1,7 @@
-import React from "react";
+import { useNavigate } from "react-router";
 
 function Home() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       
@@ -18,7 +19,11 @@ function Home() {
 
         <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
 
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition">
+          <button
+            type="button"
+            className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition"
+            onClick={() => navigate("/articles")}
+          >
             Explore Articles
           </button>
 

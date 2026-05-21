@@ -6,6 +6,7 @@ import { userApp } from "./API/UserAPI.js";
 import { authorApp } from "./API/AuthorAPI.js";
 import { adminApp } from "./API/AdminAPI.js";
 import { commonApp } from "./API/commonAPI.js";
+import { publicApp } from "./API/PublicAPI.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
@@ -55,6 +56,7 @@ app.use("/user-api", userApp);
 app.use("/author-api", authorApp);
 app.use("/admin-api", adminApp);
 app.use("/auth", commonApp);
+app.use("/public-api", publicApp);
 
 // assign port
 
