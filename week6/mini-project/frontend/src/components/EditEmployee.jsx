@@ -49,51 +49,73 @@ function EditEmployee() {
     return <p className="text-red-500 text-center text-3xl">{error}</p>;
   }
   return (
-    <div>
-      <h1 className="text-5xl text-center text-red-600">Edit Employee</h1>
+    <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-white/95 p-8 shadow-xl shadow-slate-200/80 sm:p-10">
+      <div className="mb-8 text-center">
+        <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
+          Edit profile
+        </p>
+        <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+          Update employee details
+        </h1>
+        <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+          Change the information below and save your edits. The email address is
+          locked for consistency.
+        </p>
+      </div>
 
-      <form
-        className=" max-w-md mx-auto mt-10"
-        onSubmit={handleSubmit(saveModifiedEmp)}
-      >
-        <input
-          type="text"
-          placeholder="Enter name "
-          {...register("name")}
-          className="mb-3  border-2 p-3 w-full rounded-2xl"
-        />
-        <input
-          type="email"
-          placeholder="Enter Email "
-          {...register("email")}
-          className="mb-3  border-2 p-3 w-full rounded-2xl"
-          disabled // diabled in form for editing
-        />
-
-        <input
-          type="number"
-          placeholder="Enter mobile number"
-          {...register("mobile")}
-          className="mb-3  border-2 p-3 w-full rounded-2xl"
-        />
-        <input
-          type="text"
-          placeholder="Enter designation"
-          {...register("designation")}
-          className="mb-3  border-2 p-3 w-full rounded-2xl"
-        />
-        <input
-          type="text"
-          placeholder="Enter name of the company"
-          {...register("companyName")}
-          className="mb-3  border-2 p-3 w-full rounded-2xl"
-        />
+      <form className="grid gap-4" onSubmit={handleSubmit(saveModifiedEmp)}>
+        <label className="block space-y-2 text-slate-700">
+          <span className="text-sm font-medium">Name</span>
+          <input
+            type="text"
+            placeholder="Enter name"
+            {...register("name")}
+            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+          />
+        </label>
+        <label className="block space-y-2 text-slate-700">
+          <span className="text-sm font-medium">Email</span>
+          <input
+            type="email"
+            placeholder="Enter Email"
+            {...register("email")}
+            className="w-full rounded-3xl border border-slate-200 bg-slate-100 px-5 py-4 text-sm text-slate-600 outline-none"
+            disabled
+          />
+        </label>
+        <label className="block space-y-2 text-slate-700">
+          <span className="text-sm font-medium">Mobile</span>
+          <input
+            type="number"
+            placeholder="Enter mobile number"
+            {...register("mobile")}
+            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+          />
+        </label>
+        <label className="block space-y-2 text-slate-700">
+          <span className="text-sm font-medium">Designation</span>
+          <input
+            type="text"
+            placeholder="Enter designation"
+            {...register("designation")}
+            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+          />
+        </label>
+        <label className="block space-y-2 text-slate-700">
+          <span className="text-sm font-medium">Company</span>
+          <input
+            type="text"
+            placeholder="Enter company name"
+            {...register("companyName")}
+            className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+          />
+        </label>
 
         <button
           type="submit"
-          className="text-2xl rounded-2xl bg-green-600 text-white block mx-auto p-4"
+          className="mt-4 inline-flex w-full items-center justify-center rounded-3xl bg-emerald-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-emerald-700"
         >
-          Save
+          Save Changes
         </button>
       </form>
     </div>

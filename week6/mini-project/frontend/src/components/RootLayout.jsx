@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 
 function RootLayout() {
   return (
-    <div>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <Header />
-      <div className="min-h-screen mx-20 p-20 bg-gray-100">
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 }

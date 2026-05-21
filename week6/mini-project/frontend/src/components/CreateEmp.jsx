@@ -42,56 +42,63 @@ function CreateEmp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-lg bg-white p-6 sm:p-10 rounded-2xl shadow-md">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl text-center text-gray-600 mb-6">
-          Create New Employee
+    <div className="mx-auto max-w-3xl rounded-[2rem] border border-slate-200 bg-white/95 p-6 shadow-2xl shadow-slate-200/80 sm:p-10">
+      <div className="space-y-3 text-center">
+        <p className="font-semibold uppercase tracking-[0.3em] text-sky-600">
+          New employee
+        </p>
+        <h1 className="text-3xl font-semibold text-slate-900 sm:text-4xl">
+          Create a clean employee record
         </h1>
-
-        <form className="space-y-4" onSubmit={handleSubmit(onFormSubmit)}>
-          <input
-            type="text"
-            placeholder="Enter name"
-            {...register("name")}
-            className="w-full border p-3 rounded-xl text-sm sm:text-base"
-          />
-
-          <input
-            type="email"
-            placeholder="Enter Email"
-            {...register("email")}
-            className="w-full border p-3 rounded-xl text-sm sm:text-base"
-          />
-
-          <input
-            type="number"
-            placeholder="Enter mobile number"
-            {...register("mobile")}
-            className="w-full border p-3 rounded-xl text-sm sm:text-base"
-          />
-
-          <input
-            type="text"
-            placeholder="Enter designation"
-            {...register("designation")}
-            className="w-full border p-3 rounded-xl text-sm sm:text-base"
-          />
-
-          <input
-            type="text"
-            placeholder="Enter name of the company"
-            {...register("companyName")}
-            className="w-full border p-3 rounded-xl text-sm sm:text-base"
-          />
-
-          <button
-            type="submit"
-            className="w-full text-lg rounded-xl bg-gray-600 text-white p-3"
-          >
-            Add Emp
-          </button>
-        </form>
+        <p className="mx-auto max-w-2xl text-sm leading-6 text-slate-500">
+          Fill in the details and save the employee to your dashboard. The
+          interface is designed for fast data entry and easy review.
+        </p>
       </div>
+
+      <form className="mt-10 grid gap-4" onSubmit={handleSubmit(onFormSubmit)}>
+        <input
+          type="text"
+          placeholder="Name"
+          {...register("name")}
+          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          {...register("email")}
+          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+        />
+
+        <input
+          type="number"
+          placeholder="Mobile number"
+          {...register("mobile")}
+          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+        />
+
+        <input
+          type="text"
+          placeholder="Designation"
+          {...register("designation")}
+          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+        />
+
+        <input
+          type="text"
+          placeholder="Company name"
+          {...register("companyName")}
+          className="w-full rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm text-slate-900 outline-none transition focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+        />
+
+        <button
+          type="submit"
+          className="inline-flex items-center justify-center rounded-3xl bg-sky-600 px-6 py-4 text-base font-semibold text-white transition hover:bg-sky-700"
+        >
+          Add Employee
+        </button>
+      </form>
     </div>
   );
 }

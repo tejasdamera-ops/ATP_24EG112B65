@@ -61,41 +61,79 @@ function ListOfEmps() {
     return <p className="text-red-500 text-center text-3xl">{error}</p>;
   }
   return (
-    <div>
-      <h1 className="text-4xl text-center">List of Employees</h1>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+    <section className="space-y-8">
+      <header className="flex flex-col gap-4 rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-lg shadow-slate-200/80 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm uppercase tracking-[0.3em] text-slate-500">
+            Team roster
+          </p>
+          <h1 className="mt-3 text-3xl font-semibold text-slate-900">
+            Employee directory
+          </h1>
+          <p className="mt-2 text-sm text-slate-600">
+            Browse staff records and use the quick actions to manage each
+            profile.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate("create-emp")}
+          className="inline-flex items-center justify-center rounded-full bg-sky-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-700"
+        >
+          Add new employee
+        </button>
+      </header>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {emps.map((empObj) => (
-          <div
+          <article
             key={empObj._id}
-            className=" bg-white p-2 rounded-2xl shadow-2xl shadow-amber-800"
+            className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
           >
-            <p>{empObj?.email}</p>
-            <p>{empObj?.name}</p>
-            <div className="flex justify-around">
-              {/* 3 buttons */}
+            <div className="mb-4">
+              <p className="text-sm uppercase tracking-[0.2em] text-slate-400">
+                {empObj?.designation || "Team member"}
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">
+                {empObj?.name}
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                {empObj?.companyName}
+              </p>
+            </div>
+            <div className="space-y-3 text-sm text-slate-600">
+              <p>
+                <span className="font-semibold text-slate-900">Email:</span>{" "}
+                {empObj?.email}
+              </p>
+              <p>
+                <span className="font-semibold text-slate-900">Phone:</span>{" "}
+                {empObj?.mobile}
+              </p>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
               <button
                 onClick={() => goToEmployee(empObj)}
-                className="bg-amber-300 p-2 rounded-3xl"
+                className="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-200"
               >
                 View
               </button>
               <button
                 onClick={() => goToEditEmp(empObj)}
-                className="bg-blue-300 p-2 rounded-3xl"
+                className="rounded-full bg-sky-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-sky-700"
               >
                 Edit
               </button>
               <button
                 onClick={() => deleteEmp(empObj._id)}
-                className="bg-red-300 p-2 rounded-3xl"
+                className="rounded-full bg-rose-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-rose-600"
               >
                 Delete
               </button>
             </div>
-          </div>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 }
 
