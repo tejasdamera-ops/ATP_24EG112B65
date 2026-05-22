@@ -261,18 +261,11 @@ function ArticleByID() {
         </div>
       )}
 
-      {/* Comment form — logged-in users can post; guests see login prompt */}
-      {article.isArticleActive && (
+      {/* Comment form — only visible for logged-in users */}
+      {article.isArticleActive && user?.role === "USER" && (
         <div className={`${articleActions} mt-4`}>
           <form
-            onSubmit={
-              user?.role === "USER"
-                ? handleSubmit(addComment)
-                : (e) => {
-                    e.preventDefault();
-                    promptLoginToComment();
-                  }
-            }
+            onSubmit={handleSubmit(addComment)}
             className="flex flex-col sm:flex-row gap-3"
           >
             <input
